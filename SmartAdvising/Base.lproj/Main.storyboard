@@ -102,11 +102,12 @@
                                 <state key="normal" title="Log in"/>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rt6-uj-Xgu">
-                                <rect key="frame" x="20" y="247" width="374" height="86"/>
+                                <rect key="frame" x="20" y="247" width="374" height="129"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4R-BA-YLD">
-                                        <rect key="frame" x="8" y="43" width="358" height="43"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1j9-Xx-Whp">
+                                        <rect key="frame" x="8" y="0.0" width="358" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -118,9 +119,26 @@
                                             <constraint firstAttribute="height" constant="1" id="yBa-V7-NQ1"/>
                                         </constraints>
                                     </view>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1j9-Xx-Whp">
-                                        <rect key="frame" x="8" y="0.0" width="358" height="43"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Major" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4R-BA-YLD">
+                                        <rect key="frame" x="8" y="43" width="358" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="63B-He-XlA">
+                                        <rect key="frame" x="0.0" y="86" width="374" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="Ku2-q7-rG1"/>
+                                        </constraints>
+                                        <viewLayoutGuide key="safeArea" id="A7C-R7-Pph"/>
+                                    </view>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Year" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k6q-Mg-kVE">
+                                        <rect key="frame" x="8" y="86" width="358" height="43"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -129,9 +147,13 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="QTx-rQ-8vC" firstAttribute="top" secondItem="Rt6-uj-Xgu" secondAttribute="top" constant="43" id="1hb-5R-vEs"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="129" id="D5M-8j-uqT"/>
+                                    <constraint firstItem="63B-He-XlA" firstAttribute="centerX" secondItem="Rt6-uj-Xgu" secondAttribute="centerX" id="Foa-1k-HNr"/>
                                     <constraint firstItem="QTx-rQ-8vC" firstAttribute="width" secondItem="Rt6-uj-Xgu" secondAttribute="width" id="Ipm-Ix-M9B"/>
-                                    <constraint firstAttribute="height" constant="86" id="UFJ-HL-dXG"/>
+                                    <constraint firstItem="63B-He-XlA" firstAttribute="top" secondItem="Rt6-uj-Xgu" secondAttribute="top" constant="86" id="QWY-Jv-Ms3"/>
                                     <constraint firstItem="QTx-rQ-8vC" firstAttribute="centerX" secondItem="Rt6-uj-Xgu" secondAttribute="centerX" id="UqF-0x-Fgd"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="129" id="gSN-jo-gJo"/>
+                                    <constraint firstItem="63B-He-XlA" firstAttribute="width" secondItem="Rt6-uj-Xgu" secondAttribute="width" id="grp-Mt-Bot"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -149,6 +171,9 @@
                     </view>
                     <connections>
                         <outlet property="loginFieldsView" destination="Rt6-uj-Xgu" id="wUn-hq-u2H"/>
+                        <outlet property="majorField" destination="S4R-BA-YLD" id="WfY-me-c83"/>
+                        <outlet property="schoolField" destination="1j9-Xx-Whp" id="cWz-YD-sJi"/>
+                        <outlet property="yearField" destination="k6q-Mg-kVE" id="jbe-oV-9Yy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="arJ-ah-8z7" userLabel="First Responder" sceneMemberID="firstResponder"/>
