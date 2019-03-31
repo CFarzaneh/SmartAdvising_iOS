@@ -1,0 +1,6 @@
+framework module Pods_SmartAdvisingUITests {
+  umbrella header "Pods-SmartAdvisingUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
