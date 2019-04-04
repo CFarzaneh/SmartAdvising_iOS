@@ -5,6 +5,8 @@ target 'SmartAdvising' do
   use_frameworks!
 
   pod 'Alamofire', '~> 5.0.0-beta.3'
+  pod 'p2.OAuth2'
+  pod 'SwiftyJSON'
 
   target 'SmartAdvisingTests' do
     inherit! :search_paths

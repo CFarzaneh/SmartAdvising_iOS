@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "0930"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3E3307531BF48D6CFF4C3F26D286EFE2"
+               BlueprintIdentifier = "C6B63670000CD1868629616ACCC43C2F"
                BuildableName = "Pods_SmartAdvising.framework"
                BlueprintName = "Pods-SmartAdvising"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3E3307531BF48D6CFF4C3F26D286EFE2"
+            BlueprintIdentifier = "C6B63670000CD1868629616ACCC43C2F"
             BuildableName = "Pods_SmartAdvising.framework"
             BlueprintName = "Pods-SmartAdvising"
             ReferencedContainer = "container:Pods.xcodeproj">

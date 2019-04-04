@@ -10,6 +10,7 @@
 		500AB451BA1292B93F31495C /* Pods_SmartAdvisingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8F563943605499CEF97000 /* Pods_SmartAdvisingUITests.framework */; };
 		831CC7C44D3AB86ED8645560 /* Pods_SmartAdvising.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525363EF2AEE28718C69ED3D /* Pods_SmartAdvising.framework */; };
 		908EB34DB506B8E9D4C980A9 /* Pods_SmartAdvisingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9E8DD420665A114240C3A8 /* Pods_SmartAdvisingTests.framework */; };
+		DF3EE5C622553031005115F1 /* SmartAdvising.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DF3EE5C422553031005115F1 /* SmartAdvising.xcdatamodeld */; };
 		DF578334224C4D1A0091DDF6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF578333224C4D1A0091DDF6 /* AppDelegate.swift */; };
 		DF578336224C4D1A0091DDF6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF578335224C4D1A0091DDF6 /* FirstViewController.swift */; };
 		DF578338224C4D1A0091DDF6 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF578337224C4D1A0091DDF6 /* SecondViewController.swift */; };
@@ -18,7 +19,12 @@
 		DF578340224C4D1C0091DDF6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF57833E224C4D1C0091DDF6 /* LaunchScreen.storyboard */; };
 		DF57834B224C4D1C0091DDF6 /* SmartAdvisingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF57834A224C4D1C0091DDF6 /* SmartAdvisingTests.swift */; };
 		DF578356224C4D1C0091DDF6 /* SmartAdvisingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF578355224C4D1C0091DDF6 /* SmartAdvisingUITests.swift */; };
+		DF7880402255474200D0E105 /* CustomUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF78803F2255474200D0E105 /* CustomUITextField.swift */; };
+		DF7880422255487000D0E105 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7880412255487000D0E105 /* PersistenceService.swift */; };
+		DF78804522554BB300D0E105 /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF78804322554BB300D0E105 /* User+CoreDataClass.swift */; };
+		DF78804622554BB300D0E105 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF78804422554BB300D0E105 /* User+CoreDataProperties.swift */; };
 		DFAE89A1225130F20049FA36 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE89A0225130F20049FA36 /* LoginViewController.swift */; };
+		DFB33D6922529D160056FF40 /* OutlookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB33D6822529D160056FF40 /* OutlookService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,7 @@
 		CCEA42005D7596D5BF0C58DB /* Pods-SmartAdvisingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartAdvisingUITests.release.xcconfig"; path = "Target Support Files/Pods-SmartAdvisingUITests/Pods-SmartAdvisingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D904F57948501F6929C93B55 /* Pods-SmartAdvisingUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartAdvisingUITests.debug.xcconfig"; path = "Target Support Files/Pods-SmartAdvisingUITests/Pods-SmartAdvisingUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DB9E8DD420665A114240C3A8 /* Pods_SmartAdvisingTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartAdvisingTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF3EE5C522553031005115F1 /* SmartAdvising.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SmartAdvising.xcdatamodel; sourceTree = "<group>"; };
 		DF578330224C4D1A0091DDF6 /* SmartAdvising.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartAdvising.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF578333224C4D1A0091DDF6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF578335224C4D1A0091DDF6 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -61,7 +68,12 @@
 		DF578351224C4D1C0091DDF6 /* SmartAdvisingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartAdvisingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF578355224C4D1C0091DDF6 /* SmartAdvisingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartAdvisingUITests.swift; sourceTree = "<group>"; };
 		DF578357224C4D1C0091DDF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF78803F2255474200D0E105 /* CustomUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUITextField.swift; sourceTree = "<group>"; };
+		DF7880412255487000D0E105 /* PersistenceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
+		DF78804322554BB300D0E105 /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataClass.swift"; path = "/Users/cfarzaneh/Desktop/SmartAdvising/SmartAdvising/User+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		DF78804422554BB300D0E105 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "/Users/cfarzaneh/Desktop/SmartAdvising/SmartAdvising/User+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		DFAE89A0225130F20049FA36 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		DFB33D6822529D160056FF40 /* OutlookService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutlookService.swift; sourceTree = "<group>"; };
 		FC8F563943605499CEF97000 /* Pods_SmartAdvisingUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartAdvisingUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -135,10 +147,14 @@
 				DF578335224C4D1A0091DDF6 /* FirstViewController.swift */,
 				DF578337224C4D1A0091DDF6 /* SecondViewController.swift */,
 				DFAE89A0225130F20049FA36 /* LoginViewController.swift */,
+				DFB33D6822529D160056FF40 /* OutlookService.swift */,
+				DF78803F2255474200D0E105 /* CustomUITextField.swift */,
+				DF78804722554BB900D0E105 /* CoreData */,
 				DF578339224C4D1A0091DDF6 /* Main.storyboard */,
 				DF57833C224C4D1C0091DDF6 /* Assets.xcassets */,
 				DF57833E224C4D1C0091DDF6 /* LaunchScreen.storyboard */,
 				DF578341224C4D1C0091DDF6 /* Info.plist */,
+				DF3EE5C422553031005115F1 /* SmartAdvising.xcdatamodeld */,
 			);
 			path = SmartAdvising;
 			sourceTree = "<group>";
@@ -159,6 +175,16 @@
 				DF578357224C4D1C0091DDF6 /* Info.plist */,
 			);
 			path = SmartAdvisingUITests;
+			sourceTree = "<group>";
+		};
+		DF78804722554BB900D0E105 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				DF7880412255487000D0E105 /* PersistenceService.swift */,
+				DF78804322554BB300D0E105 /* User+CoreDataClass.swift */,
+				DF78804422554BB300D0E105 /* User+CoreDataProperties.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		FB7CF0EE7D6768CB1A937A17 /* Frameworks */ = {
@@ -311,12 +337,16 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SmartAdvising/Pods-SmartAdvising-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/p2.OAuth2/p2_OAuth2.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/p2_OAuth2.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -396,9 +426,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF3EE5C622553031005115F1 /* SmartAdvising.xcdatamodeld in Sources */,
+				DF7880422255487000D0E105 /* PersistenceService.swift in Sources */,
 				DFAE89A1225130F20049FA36 /* LoginViewController.swift in Sources */,
+				DFB33D6922529D160056FF40 /* OutlookService.swift in Sources */,
+				DF7880402255474200D0E105 /* CustomUITextField.swift in Sources */,
+				DF78804522554BB300D0E105 /* User+CoreDataClass.swift in Sources */,
 				DF578338224C4D1A0091DDF6 /* SecondViewController.swift in Sources */,
 				DF578334224C4D1A0091DDF6 /* AppDelegate.swift in Sources */,
+				DF78804622554BB300D0E105 /* User+CoreDataProperties.swift in Sources */,
 				DF578336224C4D1A0091DDF6 /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -736,6 +772,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DF3EE5C422553031005115F1 /* SmartAdvising.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DF3EE5C522553031005115F1 /* SmartAdvising.xcdatamodel */,
+			);
+			currentVersion = DF3EE5C522553031005115F1 /* SmartAdvising.xcdatamodel */;
+			path = SmartAdvising.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DF578328224C4D1A0091DDF6 /* Project object */;
 }

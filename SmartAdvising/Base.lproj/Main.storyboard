@@ -20,6 +20,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tableView>
                     <navigationItem key="navigationItem" title="Waiting Room" id="f95-va-V6H">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="4ka-P8-wpa">
+                            <connections>
+                                <action selector="logout:" destination="9pv-A4-QxB" id="Vl3-rW-q3x"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="dLs-7d-7ag"/>
                     </navigationItem>
                 </viewController>
@@ -91,20 +96,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="advising" translatesAutoresizingMaskIntoConstraints="NO" id="4Rf-8E-yNq">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SmartAdvising" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OxP-bY-61q">
-                                <rect key="frame" x="109.5" y="131" width="195" height="37"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="31"/>
+                                <rect key="frame" x="106" y="131" width="202" height="40.5"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="35"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nuf-SD-l3p">
-                                <rect key="frame" x="186" y="620" width="42" height="30"/>
+                                <rect key="frame" x="20" y="603" width="374" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="g44-oo-sGS"/>
+                                </constraints>
                                 <state key="normal" title="Log in"/>
+                                <connections>
+                                    <action selector="loginButton:" destination="4Wh-8t-gf4" eventType="touchUpInside" id="Q3U-q4-p4T"/>
+                                    <action selector="touchExit:" destination="4Wh-8t-gf4" eventType="touchDragExit" id="Ou1-h4-6hp"/>
+                                    <action selector="touched:" destination="4Wh-8t-gf4" eventType="touchDown" id="3gy-2a-kLI"/>
+                                    <action selector="weBack:" destination="4Wh-8t-gf4" eventType="touchDragEnter" id="aRP-ne-H7s"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rt6-uj-Xgu">
-                                <rect key="frame" x="20" y="247" width="374" height="129"/>
+                                <rect key="frame" x="20" y="250.5" width="374" height="129"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1j9-Xx-Whp">
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1j9-Xx-Whp" customClass="CustomUITextField" customModule="SmartAdvising" customModuleProvider="target">
                                         <rect key="frame" x="8" y="0.0" width="358" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -114,12 +132,12 @@
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QTx-rQ-8vC">
                                         <rect key="frame" x="0.0" y="43" width="374" height="1"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="yBa-V7-NQ1"/>
                                         </constraints>
                                     </view>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Major" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4R-BA-YLD">
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Major" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4R-BA-YLD" customClass="CustomUITextField" customModule="SmartAdvising" customModuleProvider="target">
                                         <rect key="frame" x="8" y="43" width="358" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -129,13 +147,13 @@
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="63B-He-XlA">
                                         <rect key="frame" x="0.0" y="86" width="374" height="1"/>
-                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="Ku2-q7-rG1"/>
                                         </constraints>
                                         <viewLayoutGuide key="safeArea" id="A7C-R7-Pph"/>
                                     </view>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Year" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k6q-Mg-kVE">
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Year" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k6q-Mg-kVE" customClass="CustomUITextField" customModule="SmartAdvising" customModuleProvider="target">
                                         <rect key="frame" x="8" y="86" width="358" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -162,14 +180,16 @@
                             <constraint firstItem="Rt6-uj-Xgu" firstAttribute="leading" secondItem="dzH-A4-ZfM" secondAttribute="leading" constant="20" id="12L-Ys-BPk"/>
                             <constraint firstItem="Rt6-uj-Xgu" firstAttribute="top" secondItem="OxP-bY-61q" secondAttribute="bottom" constant="79" id="BPe-bY-dkR"/>
                             <constraint firstItem="dzH-A4-ZfM" firstAttribute="trailing" secondItem="Rt6-uj-Xgu" secondAttribute="trailing" constant="20" id="K58-2s-Jz8"/>
+                            <constraint firstItem="nuf-SD-l3p" firstAttribute="top" secondItem="dzH-A4-ZfM" secondAttribute="bottom" constant="-259" id="Qst-Lo-5oH"/>
                             <constraint firstItem="OxP-bY-61q" firstAttribute="top" secondItem="dzH-A4-ZfM" secondAttribute="top" constant="87" id="aNy-Ou-uZO"/>
-                            <constraint firstItem="nuf-SD-l3p" firstAttribute="centerX" secondItem="dzH-A4-ZfM" secondAttribute="centerX" id="eSh-Vo-kEN"/>
-                            <constraint firstItem="dzH-A4-ZfM" firstAttribute="bottom" secondItem="nuf-SD-l3p" secondAttribute="bottom" constant="212" id="jTt-jh-rqu"/>
+                            <constraint firstItem="nuf-SD-l3p" firstAttribute="width" secondItem="Rt6-uj-Xgu" secondAttribute="width" id="ewe-gN-Gh1"/>
                             <constraint firstItem="OxP-bY-61q" firstAttribute="centerX" secondItem="dzH-A4-ZfM" secondAttribute="centerX" id="rx9-s6-rBY"/>
+                            <constraint firstItem="nuf-SD-l3p" firstAttribute="centerX" secondItem="dzH-A4-ZfM" secondAttribute="centerX" id="vcs-Ow-S9o"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dzH-A4-ZfM"/>
                     </view>
                     <connections>
+                        <outlet property="login" destination="nuf-SD-l3p" id="YdG-HP-W5V"/>
                         <outlet property="loginFieldsView" destination="Rt6-uj-Xgu" id="wUn-hq-u2H"/>
                         <outlet property="majorField" destination="S4R-BA-YLD" id="WfY-me-c83"/>
                         <outlet property="schoolField" destination="1j9-Xx-Whp" id="cWz-YD-sJi"/>
@@ -201,6 +221,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="advising" width="3057" height="4585"/>
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>

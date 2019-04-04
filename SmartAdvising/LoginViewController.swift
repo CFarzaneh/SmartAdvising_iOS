@@ -10,10 +10,12 @@ import UIKit
 class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var loginFieldsView: UIView!
-    @IBOutlet weak var schoolField: UITextField!
-    @IBOutlet weak var majorField: UITextField!
-    @IBOutlet weak var yearField: UITextField!
+    @IBOutlet weak var schoolField: CustomUITextField!
+    @IBOutlet weak var majorField: CustomUITextField!
+    @IBOutlet weak var yearField: CustomUITextField!
     
+   
+    @IBOutlet weak var login: UIButton!
     let schoolOption = ["Florida State University"]
     let majorsOption = ["Computer Science", "Physics", "Mathematics"]
     let yearOption = ["Undergraduate", "Graduate"]
@@ -22,14 +24,34 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     let majorPickerView = UIPickerView()
     let yearPickerView = UIPickerView()
     
+    let service = OutlookService.shared()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        login.backgroundColor = UIColor(red: 200.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        
+        login.layer.cornerRadius = 10.0
+        
+        login.layer.borderWidth = 2.0
+        login.layer.borderColor = UIColor.clear.cgColor
+        
+        login.layer.shadowColor = UIColor(red: 100.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
+        login.layer.shadowOpacity = 1.0
+        login.layer.shadowRadius = 1.0
+        login.layer.shadowOffset = CGSize(width: 0, height: 3)
+        login.setTitleColor(.white, for: .normal)
+        
+        login.isUserInteractionEnabled = false
+        login.alpha = 0.5
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
         
-        loginFieldsView.layer.cornerRadius = 5
+        loginFieldsView.layer.cornerRadius = 10
+        
+        setLogInState(loggedIn: service.isLoggedIn)
         
         let schoolToolBar = UIToolbar()
         schoolToolBar.barStyle = UIBarStyle.default
@@ -77,10 +99,28 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         
     }
     
+    @IBAction func touched(_ sender: Any) {
+        login.layer.shadowOpacity = 0
+        login.layer.shadowRadius = 0
+        login.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+    @IBAction func weBack(_ sender: Any) {
+        login.layer.shadowOpacity = 0
+        login.layer.shadowRadius = 0
+        login.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+    
+    @IBAction func touchExit(_ sender: Any) {
+        login.layer.shadowOpacity = 1.0
+        login.layer.shadowRadius = 1.0
+        login.layer.shadowOffset = CGSize(width: 0, height: 3)
+    }
+    
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
         schoolField.resignFirstResponder()
         majorField.resignFirstResponder()
         yearField.resignFirstResponder()
+        enableLogin()
     }
     
     @objc func nextSchool(_ sender:UIBarButtonItem!) {
@@ -95,25 +135,95 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     @objc func prevMajor(_ sender:UIBarButtonItem!) {
-        majorField.text = majorsOption[majorPickerView.selectedRow(inComponent: 0)]
+        //majorField.text = majorsOption[majorPickerView.selectedRow(inComponent: 0)]
         schoolField.becomeFirstResponder()
     }
     
     @objc func prevGrade(_ sender:UIBarButtonItem!) {
-        yearField.text = yearOption[yearPickerView.selectedRow(inComponent: 0)]
+        //yearField.text = yearOption[yearPickerView.selectedRow(inComponent: 0)]
         majorField.becomeFirstResponder()
     }
     
     @objc func toolbarLogin(_ sender:UIBarButtonItem!) {
         yearField.text = yearOption[yearPickerView.selectedRow(inComponent: 0)]
         yearField.resignFirstResponder()
-        print("Login")
+        enableLogin()
+
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
+    func enableLogin() {
+
+        if !schoolField.text!.isEmpty && !majorField.text!.isEmpty && !yearField.text!.isEmpty {
+            login.isUserInteractionEnabled = true
+            login.alpha = 1.0
+        }
+    }
+    
+    @IBAction func loginButton(_ sender: Any) {
+        
+        login.layer.shadowOpacity = 1.0
+        login.layer.shadowRadius = 1.0
+        login.layer.shadowOffset = CGSize(width: 0, height: 3)
+        
+        if (service.isLoggedIn) {
+            // Logout
+            service.logout()
+            setLogInState(loggedIn: false)
+        } else {
+            // Login
+            service.login(from: self) {
+                error in
+                if let unwrappedError = error {
+                    NSLog("Error logging in: \(unwrappedError)")
+                } else {
+                    NSLog("Successfully logged in.")
+                    self.setLogInState(loggedIn: true)
+                    self.loadUserData()
+                }
+            }
+        }
+    }
+    
+    func loadUserData() {
+        service.getUserEmail() {
+            email in
+            if let unwrappedEmail = email {
+                NSLog("Hello \(unwrappedEmail)")
+                
+                let user = User(context: PersistenceService.context)
+                user.email = unwrappedEmail
+                user.major = self.majorField.text
+                user.school = self.schoolField.text
+                if self.yearField.text == "Undergraduate" {
+                    user.undergrad = true
+                }
+                else {
+                    user.undergrad = false
+                }
+            
+                PersistenceService.saveContext()
+                
+                self.dismiss(animated: true, completion: nil)
+                
+            }
+        }
+    }
+    
+
+    
+    
+    func setLogInState(loggedIn: Bool) {
+        if (loggedIn) {
+            login.setTitle("Log Out", for: UIControl.State.normal)
+        }
+        else {
+            login.setTitle("Log In", for: UIControl.State.normal)
+        }
+    }
     
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
