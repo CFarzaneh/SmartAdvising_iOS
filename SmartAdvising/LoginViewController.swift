@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -14,10 +16,18 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     @IBOutlet weak var majorField: CustomUITextField!
     @IBOutlet weak var yearField: CustomUITextField!
     
+    struct University {
+        // structure definition goes here
+        var id = 0
+        var name: String?
+        var email_tld: String?
+        
+    }
+    
    
     @IBOutlet weak var login: UIButton!
-    let schoolOption = ["Florida State University"]
-    let majorsOption = ["Computer Science", "Physics", "Mathematics"]
+    var schoolOption = [University]()
+    var majorsOption = [String]()
     let yearOption = ["Undergraduate", "Graduate"]
     
     let schoolPickerView = UIPickerView()
@@ -72,18 +82,36 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         let prevMajorButton = UIBarButtonItem(title: "Previous", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.prevMajor(_:)))
         let nextMajorButton = UIBarButtonItem(title: "Next", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.nextMajor(_:)))
         let prevGradeButton = UIBarButtonItem(title: "Previous", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.prevGrade(_:)))
-        let loginButton = UIBarButtonItem(title: "Login", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.toolbarLogin(_:)))
+        let loginButton = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.toolbarLogin(_:)))
+        
+        let schoolLabel = UILabel(frame: CGRect(x:0,y:0,width:200,height:21))
+        schoolLabel.text = "School"
+        schoolLabel.center = CGPoint(x: view.frame.midX, y: view.frame.height)
+        schoolLabel.textAlignment = NSTextAlignment.center
+        let schoolTitle = UIBarButtonItem(customView: schoolLabel)
+        
+        let majorLabel = UILabel(frame: CGRect(x:0,y:0,width:200,height:21))
+        majorLabel.text = "Major"
+        majorLabel.center = CGPoint(x: view.frame.midX, y: view.frame.height)
+        majorLabel.textAlignment = NSTextAlignment.center
+        let majorTitle = UIBarButtonItem(customView: majorLabel)
+        
+        let yearLabel = UILabel(frame: CGRect(x:0,y:0,width:200,height:21))
+        yearLabel.text = "Year"
+        yearLabel.center = CGPoint(x: view.frame.midX, y: view.frame.height)
+        yearLabel.textAlignment = NSTextAlignment.center
+        let yearTitle = UIBarButtonItem(customView: yearLabel)
 
         
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         
-        schoolToolBar.setItems([spaceButton, nextSchoolButton], animated: false)
+        schoolToolBar.setItems([spaceButton,schoolTitle,spaceButton, nextSchoolButton], animated: false)
         schoolToolBar.isUserInteractionEnabled = true
         
-        majorsToolBar.setItems([prevMajorButton, spaceButton, nextMajorButton], animated: false)
+        majorsToolBar.setItems([prevMajorButton, spaceButton,majorTitle,spaceButton, nextMajorButton], animated: false)
         majorsToolBar.isUserInteractionEnabled = true
         
-        gradeToolBar.setItems([prevGradeButton, spaceButton, loginButton], animated: false)
+        gradeToolBar.setItems([prevGradeButton, spaceButton, yearTitle, spaceButton, loginButton], animated: false)
         gradeToolBar.isUserInteractionEnabled = true
         
         schoolPickerView.delegate = self
@@ -97,6 +125,70 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         yearField.inputAccessoryView = gradeToolBar
         yearField.inputView = yearPickerView
         
+        getSchools()
+        
+    }
+    
+    func getSchools() {
+        let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/colleges"
+        
+        let parameters: Parameters = [
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
+        
+        AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
+            response in
+            
+            
+            switch response.result {
+            case .success(let value):
+                self.parseResults(theJSON: JSON(value),id:0)
+            case .failure(let error):
+                print(error)
+            }
+        })
+    }
+    
+    func getMajors(id: Int) {
+        var schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/colleges/"
+        
+        schoolUrl = schoolUrl + String(id) + "/majors"
+        
+        let parameters: Parameters = [
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
+        
+        AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
+            response in
+            
+            
+            switch response.result {
+            case .success(let value):
+                self.parseResults(theJSON: JSON(value),id:1)
+            case .failure(let error):
+                print(error)
+            }
+        })
+    }
+    
+    func parseResults(theJSON: JSON, id: Int) {
+        
+        if id == 0 {
+            for item in theJSON["colleges"].arrayValue {
+                var school = University()
+                school.id = item["id"].intValue
+                school.name = item["name"].stringValue
+                school.email_tld = item["email_tld"].stringValue
+                schoolOption.append(school)
+            }
+            schoolPickerView.reloadAllComponents()
+        }
+        else if id == 1 {
+            for item in theJSON["majors"].arrayValue {
+                majorsOption.append(item["name"].stringValue)
+            }
+            majorPickerView.reloadAllComponents()
+        }
     }
     
     @IBAction func touched(_ sender: Any) {
@@ -124,8 +216,11 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     @objc func nextSchool(_ sender:UIBarButtonItem!) {
-        schoolField.text = schoolOption[schoolPickerView.selectedRow(inComponent: 0)]
+        schoolField.text = schoolOption[schoolPickerView.selectedRow(inComponent: 0)].name!
         majorField.becomeFirstResponder()
+        
+        getMajors(id: schoolOption[schoolPickerView.selectedRow(inComponent: 0)].id)
+        
     }
     
     @objc func nextMajor(_ sender:UIBarButtonItem!) {
@@ -194,20 +289,34 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             if let unwrappedEmail = email {
                 NSLog("Hello \(unwrappedEmail)")
                 
-                let user = User(context: PersistenceService.context)
-                user.email = unwrappedEmail
-                user.major = self.majorField.text
-                user.school = self.schoolField.text
-                if self.yearField.text == "Undergraduate" {
-                    user.undergrad = true
+                
+                if !unwrappedEmail.contains("fsu") {
+                    let alert = UIAlertController(title: "Login Error", message: "It's appears you did not login with an FSU outlook email. Please login with an FSU email.", preferredStyle: .alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { action in
+                        self.service.logout()
+                        self.setLogInState(loggedIn: false)
+                    }))
+                    
+                    self.present(alert, animated: true)
                 }
                 else {
-                    user.undergrad = false
-                }
-            
-                PersistenceService.saveContext()
                 
-                self.dismiss(animated: true, completion: nil)
+                    let user = User(context: PersistenceService.context)
+                    user.email = unwrappedEmail
+                    user.major = self.majorField.text
+                    user.school = self.schoolField.text
+                    if self.yearField.text == "Undergraduate" {
+                        user.undergrad = true
+                    }
+                    else {
+                        user.undergrad = false
+                    }
+                
+                    PersistenceService.saveContext()
+                    
+                    self.dismiss(animated: true, completion: nil)
+                }
                 
             }
         }
@@ -219,6 +328,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     func setLogInState(loggedIn: Bool) {
         if (loggedIn) {
             login.setTitle("Log Out", for: UIControl.State.normal)
+            self.dismiss(animated: true, completion: nil)
         }
         else {
             login.setTitle("Log In", for: UIControl.State.normal)
@@ -241,7 +351,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == schoolPickerView {
-            return schoolOption[row]
+            return schoolOption[row].name!
         }
         else if pickerView == majorPickerView {
             return majorsOption[row]
@@ -255,7 +365,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if pickerView == schoolPickerView {
-            schoolField.text = schoolOption[row]
+            schoolField.text = schoolOption[row].name!
         }
         else if pickerView == majorPickerView {
             majorField.text = majorsOption[row]

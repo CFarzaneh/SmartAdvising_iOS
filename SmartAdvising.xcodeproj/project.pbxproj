@@ -19,6 +19,7 @@
 		DF578340224C4D1C0091DDF6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF57833E224C4D1C0091DDF6 /* LaunchScreen.storyboard */; };
 		DF57834B224C4D1C0091DDF6 /* SmartAdvisingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF57834A224C4D1C0091DDF6 /* SmartAdvisingTests.swift */; };
 		DF578356224C4D1C0091DDF6 /* SmartAdvisingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF578355224C4D1C0091DDF6 /* SmartAdvisingUITests.swift */; };
+		DF7096C5225A3362005E45E9 /* icon.artx in Resources */ = {isa = PBXBuildFile; fileRef = DF7096C4225A3362005E45E9 /* icon.artx */; };
 		DF7880402255474200D0E105 /* CustomUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF78803F2255474200D0E105 /* CustomUITextField.swift */; };
 		DF7880422255487000D0E105 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7880412255487000D0E105 /* PersistenceService.swift */; };
 		DF78804522554BB300D0E105 /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF78804322554BB300D0E105 /* User+CoreDataClass.swift */; };
@@ -68,6 +69,7 @@
 		DF578351224C4D1C0091DDF6 /* SmartAdvisingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartAdvisingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF578355224C4D1C0091DDF6 /* SmartAdvisingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartAdvisingUITests.swift; sourceTree = "<group>"; };
 		DF578357224C4D1C0091DDF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF7096C4225A3362005E45E9 /* icon.artx */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = icon.artx; sourceTree = "<group>"; };
 		DF78803F2255474200D0E105 /* CustomUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUITextField.swift; sourceTree = "<group>"; };
 		DF7880412255487000D0E105 /* PersistenceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		DF78804322554BB300D0E105 /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataClass.swift"; path = "/Users/cfarzaneh/Desktop/SmartAdvising/SmartAdvising/User+CoreDataClass.swift"; sourceTree = "<absolute>"; };
@@ -155,6 +157,7 @@
 				DF57833E224C4D1C0091DDF6 /* LaunchScreen.storyboard */,
 				DF578341224C4D1C0091DDF6 /* Info.plist */,
 				DF3EE5C422553031005115F1 /* SmartAdvising.xcdatamodeld */,
+				DF7096C4225A3362005E45E9 /* icon.artx */,
 			);
 			path = SmartAdvising;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				DF578340224C4D1C0091DDF6 /* LaunchScreen.storyboard in Resources */,
 				DF57833D224C4D1C0091DDF6 /* Assets.xcassets in Resources */,
 				DF57833B224C4D1A0091DDF6 /* Main.storyboard in Resources */,
+				DF7096C5225A3362005E45E9 /* icon.artx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
