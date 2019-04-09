@@ -7,6 +7,7 @@ target 'SmartAdvising' do
   pod 'Alamofire', '~> 5.0.0-beta.3'
   pod 'p2.OAuth2'
   pod 'SwiftyJSON'
+  pod 'Glyptodon', '~> 2.0'
 
   target 'SmartAdvisingTests' do
     inherit! :search_paths

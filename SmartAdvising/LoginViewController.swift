@@ -8,8 +8,9 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import Glyptodon
 
-class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var loginFieldsView: UIView!
     @IBOutlet weak var schoolField: CustomUITextField!
@@ -118,6 +119,15 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         majorPickerView.delegate = self
         yearPickerView.delegate = self
         
+        schoolField.delegate = self
+        majorField.delegate = self
+        yearField.delegate = self
+        
+        schoolPickerView.glyptodon.style.view.backgroundColor = GlyptodonColor.fromHexString("#D0D1D5")
+        majorPickerView.glyptodon.style.view.backgroundColor = GlyptodonColor.fromHexString("#D0D1D5")
+        schoolPickerView.glyptodon.show("Loading")
+        majorPickerView.glyptodon.show("Loading")
+        
         schoolField.inputAccessoryView = schoolToolBar
         schoolField.inputView = schoolPickerView
         majorField.inputAccessoryView = majorsToolBar
@@ -182,12 +192,14 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 schoolOption.append(school)
             }
             schoolPickerView.reloadAllComponents()
+            schoolPickerView.glyptodon.hide()
         }
         else if id == 1 {
             for item in theJSON["majors"].arrayValue {
                 majorsOption.append(item["name"].stringValue)
             }
             majorPickerView.reloadAllComponents()
+            majorPickerView.glyptodon.hide()
         }
     }
     
@@ -349,7 +361,40 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         return 1
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == majorField {
+            if schoolField.text?.isEmpty == true {
+                let currentResponder = schoolField as UITextField
+                currentResponder.perform(
+                    #selector(becomeFirstResponder),
+                    with: nil,
+                    afterDelay: 0.1
+                )
+            }
+        }
+        else if textField == yearField {
+            if schoolField.text?.isEmpty == true {
+                let currentResponder = schoolField as UITextField
+                currentResponder.perform(
+                    #selector(becomeFirstResponder),
+                    with: nil,
+                    afterDelay: 0.1
+                )
+            }
+            else if majorField.text?.isEmpty == true {
+                let currentResponder = majorField as UITextField
+                currentResponder.perform(
+                    #selector(becomeFirstResponder),
+                    with: nil,
+                    afterDelay: 0.1
+                )
+            }
+        }
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+
+        
         if pickerView == schoolPickerView {
             return schoolOption[row].name!
         }
