@@ -18,6 +18,7 @@ extension User {
 
     @NSManaged public var email: String?
     @NSManaged public var major: String?
+    @NSManaged public var majorId: Int32
     @NSManaged public var school: String?
     @NSManaged public var undergrad: Bool
 

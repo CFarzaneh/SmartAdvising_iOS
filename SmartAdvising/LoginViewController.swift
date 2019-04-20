@@ -25,10 +25,15 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         
     }
     
-   
+    struct Major {
+        var id = 0
+        var name: String?
+        var collegeId = 0
+    }
+    
     @IBOutlet weak var login: UIButton!
     var schoolOption = [University]()
-    var majorsOption = [String]()
+    var majorsOption = [Major]()
     let yearOption = ["Undergraduate", "Graduate"]
     
     let schoolPickerView = UIPickerView()
@@ -42,9 +47,8 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         // Do any additional setup after loading the view.
         
         login.backgroundColor = UIColor(red: 200.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        
         login.layer.cornerRadius = 10.0
-        
+
         login.layer.borderWidth = 2.0
         login.layer.borderColor = UIColor.clear.cgColor
         
@@ -149,10 +153,18 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
             response in
             
-            
             switch response.result {
             case .success(let value):
-                self.parseResults(theJSON: JSON(value),id:0)
+                let theJSON = JSON(value)
+                for item in theJSON["colleges"].arrayValue {
+                    var school = University()
+                    school.id = item["id"].intValue
+                    school.name = item["name"].stringValue
+                    school.email_tld = item["email_tld"].stringValue
+                    self.schoolOption.append(school)
+                }
+                self.schoolPickerView.reloadAllComponents()
+                self.schoolPickerView.glyptodon.hide()
             case .failure(let error):
                 print(error)
             }
@@ -171,35 +183,97 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
             response in
             
-            
             switch response.result {
             case .success(let value):
-                self.parseResults(theJSON: JSON(value),id:1)
+                
+                let theJSON = JSON(value)
+                
+                if self.majorsOption.isEmpty == false {
+                    self.majorsOption.removeAll()
+                }
+                
+                for item in theJSON["majors"].arrayValue {
+                    var major = Major()
+                    major.id = item["id"].intValue
+                    major.name = item["name"].stringValue
+                    major.collegeId = item["college_id"].intValue
+                    self.majorsOption.append(major)
+                }
+                self.majorPickerView.reloadAllComponents()
+                self.majorPickerView.glyptodon.hide()
             case .failure(let error):
                 print(error)
             }
         })
     }
     
-    func parseResults(theJSON: JSON, id: Int) {
+    func checkIfStudent(email: String) -> Int {
         
-        if id == 0 {
-            for item in theJSON["colleges"].arrayValue {
-                var school = University()
-                school.id = item["id"].intValue
-                school.name = item["name"].stringValue
-                school.email_tld = item["email_tld"].stringValue
-                schoolOption.append(school)
+        let identifier = email.components(separatedBy: "@")[0]
+        let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students"
+        let parameters: Parameters = [
+            "student_identifier": identifier,
+            "email":email,
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
+        
+        var returnNum = -1
+        
+        AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
+            response in
+            
+            switch response.result {
+            case .success(let value):
+                
+                let theJSON = JSON(value)
+                let theArray = theJSON["students"].arrayValue
+                
+                if theArray.isEmpty == false {
+                    for item in theJSON["students"].arrayValue {
+                        returnNum = item["id"].intValue
+                    }
+                }
+            case .failure(let error):
+                print(error)
             }
-            schoolPickerView.reloadAllComponents()
-            schoolPickerView.glyptodon.hide()
+        })
+        
+        return returnNum
+    }
+    
+    func addStudentToServer(email: String, undergrad: Bool, majorId: Int) -> Int? {
+        
+        let identifier = email.components(separatedBy: "@")[0]
+        let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students"
+        
+        let parameters: Parameters = [
+            "email": email,
+            "student_identifier":identifier,
+            "is_undergraduate":undergrad,
+            "major_id":majorId,
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
+        
+        var studentId = -1
+        
+        AF.request(schoolUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseJSON(completionHandler: {
+            response in
+            
+            switch response.result {
+            case .success(let value):
+                let theJSON = JSON(value)
+                print("Successfully added to server", theJSON["student_id"].intValue)
+                studentId = theJSON["student_id"].intValue
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        if studentId == -1 {
+            return nil
         }
-        else if id == 1 {
-            for item in theJSON["majors"].arrayValue {
-                majorsOption.append(item["name"].stringValue)
-            }
-            majorPickerView.reloadAllComponents()
-            majorPickerView.glyptodon.hide()
+        else {
+          return studentId
         }
     }
     
@@ -227,18 +301,26 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         enableLogin()
     }
     
+    var previousEmail = ""
+    
     @objc func nextSchool(_ sender:UIBarButtonItem!) {
-        schoolField.text = schoolOption[schoolPickerView.selectedRow(inComponent: 0)].name!
-        majorField.becomeFirstResponder()
-        
-        getMajors(id: schoolOption[schoolPickerView.selectedRow(inComponent: 0)].id)
-        
+        if schoolOption.isEmpty == false {
+            if previousEmail != schoolOption[schoolPickerView.selectedRow(inComponent: 0)].name! {
+                majorsOption.removeAll()
+                self.majorPickerView.glyptodon.show("Loading")
+                getMajors(id: schoolOption[schoolPickerView.selectedRow(inComponent: 0)].id)
+            }
+            schoolField.text = schoolOption[schoolPickerView.selectedRow(inComponent: 0)].name!
+            self.previousEmail = schoolOption[schoolPickerView.selectedRow(inComponent: 0)].name!
+            majorField.becomeFirstResponder()
+        }
     }
     
     @objc func nextMajor(_ sender:UIBarButtonItem!) {
-        
-        majorField.text =  majorsOption[majorPickerView.selectedRow(inComponent: 0)]
-        yearField.becomeFirstResponder()
+        if majorsOption.isEmpty == false {
+            majorField.text =  majorsOption[majorPickerView.selectedRow(inComponent: 0)].name!
+            yearField.becomeFirstResponder()
+        }
     }
     
     @objc func prevMajor(_ sender:UIBarButtonItem!) {
@@ -282,6 +364,8 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             setLogInState(loggedIn: false)
         } else {
             // Login
+
+            
             service.login(from: self) {
                 error in
                 if let unwrappedError = error {
@@ -300,7 +384,6 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             email in
             if let unwrappedEmail = email {
                 NSLog("Hello \(unwrappedEmail)")
-                
                 
                 if !unwrappedEmail.contains("fsu") {
                     let alert = UIAlertController(title: "Login Error", message: "It's appears you did not login with an FSU outlook email. Please login with an FSU email.", preferredStyle: .alert)
@@ -325,6 +408,24 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                         user.undergrad = false
                     }
                 
+                    
+                    //Get request here
+                    if self.checkIfStudent(email: unwrappedEmail) == -1 {
+                        print("Already exists!")
+                        if let index = self.majorsOption.firstIndex(where: { $0.name == self.majorField.text}) {
+                            let majorId = self.majorsOption[index].id
+                            user.majorId = Int32(majorId)
+                        }
+                    }
+                    else {
+                        if let index = self.majorsOption.firstIndex(where: { $0.name == self.majorField.text}) {
+                            let majorId = self.majorsOption[index].id
+                            if let newId = self.addStudentToServer(email: unwrappedEmail, undergrad: user.undergrad, majorId: majorId) {
+                                user.majorId = Int32(newId)
+                            }
+                        }
+                    }
+                    
                     PersistenceService.saveContext()
                     
                     self.dismiss(animated: true, completion: nil)
@@ -339,7 +440,8 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     func setLogInState(loggedIn: Bool) {
         if (loggedIn) {
-            login.setTitle("Log Out", for: UIControl.State.normal)
+            login.isUserInteractionEnabled = false
+            login.setTitle("Loading", for: UIControl.State.normal)
             self.dismiss(animated: true, completion: nil)
         }
         else {
@@ -399,7 +501,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             return schoolOption[row].name!
         }
         else if pickerView == majorPickerView {
-            return majorsOption[row]
+            return majorsOption[row].name!
         }
         else if pickerView == yearPickerView {
             return yearOption[row]
@@ -413,7 +515,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             schoolField.text = schoolOption[row].name!
         }
         else if pickerView == majorPickerView {
-            majorField.text = majorsOption[row]
+            majorField.text = majorsOption[row].name!
         }
         else if pickerView == yearPickerView {
             yearField.text = yearOption[row]
