@@ -207,7 +207,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         })
     }
     
-    func checkIfStudent(email: String) -> Int {
+    func checkIfStudent(email: String,completion : @escaping (Int)->()) {
         
         let identifier = email.components(separatedBy: "@")[0]
         let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students"
@@ -217,11 +217,10 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
         ]
         
-        var returnNum = -1
-        
+        var studentId = -1;
         AF.request(schoolUrl, method: .get, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
             response in
-            
+ 
             switch response.result {
             case .success(let value):
                 
@@ -230,18 +229,22 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 
                 if theArray.isEmpty == false {
                     for item in theJSON["students"].arrayValue {
-                        returnNum = item["id"].intValue
+                        studentId = item["id"].intValue
                     }
+                    completion(studentId)
+                }
+                else {
+                    completion(studentId)
                 }
             case .failure(let error):
                 print(error)
+                studentId = 404
+                completion(studentId)
             }
         })
-        
-        return returnNum
     }
     
-    func addStudentToServer(email: String, undergrad: Bool, majorId: Int) -> Int? {
+    func addStudentToServer(email: String, undergrad: Bool, majorId: Int, completion : @escaping (Int)->()) {
         
         let identifier = email.components(separatedBy: "@")[0]
         let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students"
@@ -264,17 +267,12 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 let theJSON = JSON(value)
                 print("Successfully added to server", theJSON["student_id"].intValue)
                 studentId = theJSON["student_id"].intValue
+                completion(studentId)
             case .failure(let error):
                 print(error)
+                completion(studentId)
             }
         })
-        
-        if studentId == -1 {
-            return nil
-        }
-        else {
-          return studentId
-        }
     }
     
     @IBAction func touched(_ sender: Any) {
@@ -358,21 +356,19 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         login.layer.shadowRadius = 1.0
         login.layer.shadowOffset = CGSize(width: 0, height: 3)
         
-        if (service.isLoggedIn) {
+        if (service.isLoggedIn && login.titleLabel!.text != "Loading") {
             // Logout
             service.logout()
             setLogInState(loggedIn: false)
         } else {
             // Login
-
-            
             service.login(from: self) {
                 error in
                 if let unwrappedError = error {
                     NSLog("Error logging in: \(unwrappedError)")
                 } else {
                     NSLog("Successfully logged in.")
-                    self.setLogInState(loggedIn: true)
+                    self.setLogInState(loggedIn: true, loading: true)
                     self.loadUserData()
                 }
             }
@@ -409,28 +405,37 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                     }
                 
                     
-                    //Get request here
-                    if self.checkIfStudent(email: unwrappedEmail) == -1 {
-                        print("Already exists!")
-                        if let index = self.majorsOption.firstIndex(where: { $0.name == self.majorField.text}) {
-                            let majorId = self.majorsOption[index].id
-                            user.majorId = Int32(majorId)
-                        }
+                    if let index = self.majorsOption.firstIndex(where: { $0.name == self.majorField.text}) {
+                        let majorId = self.majorsOption[index].id
+                        user.majorId = Int32(majorId)
                     }
-                    else {
-                        if let index = self.majorsOption.firstIndex(where: { $0.name == self.majorField.text}) {
-                            let majorId = self.majorsOption[index].id
-                            if let newId = self.addStudentToServer(email: unwrappedEmail, undergrad: user.undergrad, majorId: majorId) {
-                                user.majorId = Int32(newId)
-                            }
+                    self.checkIfStudent(email: unwrappedEmail, completion: {
+                        studentId in
+                        if (studentId != -1) {
+                            print("Already exists!")
+                            user.studentId = Int32(studentId)
+                            
+                            PersistenceService.saveContext()
+                            self.dismiss(animated: true, completion: nil)
                         }
-                    }
+                        else {
+                            print("Doesn't exist. POST request")
+                            self.addStudentToServer(email: unwrappedEmail, undergrad: user.undergrad, majorId: Int(user.majorId), completion: {
+                                newStudentId in
+                                
+                                if (newStudentId != -1) {
+                                    user.studentId = Int32(newStudentId)
+                                }
+ 
+                                PersistenceService.saveContext()
+                                
+                                self.dismiss(animated: true, completion: nil)
+                            })
+                        }
+                    })
                     
-                    PersistenceService.saveContext()
                     
-                    self.dismiss(animated: true, completion: nil)
                 }
-                
             }
         }
     }
@@ -438,11 +443,16 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
 
     
     
-    func setLogInState(loggedIn: Bool) {
+    func setLogInState(loggedIn: Bool, loading: Bool = false) {
         if (loggedIn) {
-            login.isUserInteractionEnabled = false
-            login.setTitle("Loading", for: UIControl.State.normal)
-            self.dismiss(animated: true, completion: nil)
+            if (loading == false) {
+                login.setTitle("Log Out", for: UIControl.State.normal)
+                self.dismiss(animated: true, completion: nil)
+            }
+            else if (loading == true) {
+                login.isUserInteractionEnabled = false
+                login.setTitle("Loading", for: UIControl.State.normal)
+            }
         }
         else {
             login.setTitle("Log In", for: UIControl.State.normal)
