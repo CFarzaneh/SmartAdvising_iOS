@@ -25,24 +25,87 @@ class FirstViewController: UIViewController {
     
     var yourArray = [User]()
     var queue = [Student]()
+    
+    var queueNumber = 0
 
+    @IBOutlet weak var queueLabel: UILabel!
+    @IBOutlet weak var addToQueue: UIButton!
+    
+    @IBAction func addQueue(_ sender: Any) {
+        
+        if (addToQueue.titleLabel?.text! != "Remove from Queue") {
+            let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/queuers"
+            
+            let parameters: Parameters = [
+                "student_id": yourArray[0].studentId,
+                "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+            ]
+            
+            AF.request(schoolUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseJSON(completionHandler: {
+                response in
+                
+                switch response.result {
+                case .success(let value):
+                    let theJSON = JSON(value)
+                    let theDictionary = theJSON["queuer"].dictionaryValue
+                    
+                    print("Successfully added into queue at position", theDictionary["position"]!.intValue)
+                    
+                    self.queueNumber = theDictionary["id"]!.intValue
+                
+                    self.loadQueue()
+                case .failure(let error):
+                    print(error)
+                }
+            })
+        }
+        else {
+            dequeue(id: queueNumber)
+        }
+        addToQueue.setTitle("Remove from Queue", for: .normal)
+    
+        
+    }
+    
     let service = OutlookService.shared()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
 
+    }
+    
+    func dequeue(id: Int) {
+        var schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/queuers/"
+        schoolUrl += String(id)
         
+        let parameters: Parameters = [
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
         
+        AF.request(schoolUrl, method: .delete, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
+            response in
+            
+            switch response.result {
+            case .success(_):
+                print("Successfully removed from queue")
+                self.queueNumber = 0
+                self.addToQueue.setTitle("Add to Queue", for: .normal)
+                self.loadQueue()
+                
+            case .failure(let error):
+                print(error)
+            }
+        })
     }
     
     func loadQueue() {
         
-        let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/queues/"
+        self.queue.removeAll()
+        let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/queues"
         let parameters: Parameters = [
             "major_id": yourArray[0].majorId,
-            "email":yourArray[0].undergrad,
+            "is_undergrad":yourArray[0].undergrad,
             "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
         ]
         
@@ -51,16 +114,38 @@ class FirstViewController: UIViewController {
             
             switch response.result {
             case .success(let value):
+                let theJSON = JSON(value)
                 
-                print(response)
-//                let theJSON = JSON(value)
-//                let theArray = theJSON["students"].arrayValue
-//
-//                if theArray.isEmpty == false {
-//                    for item in theJSON["students"].arrayValue {
-//                        returnNum = item["id"].intValue
-//                    }
-//                }
+                let theArray = theJSON["queue"].arrayValue
+                
+                print(theArray)
+
+                if theArray.isEmpty == false {
+                    for item in theArray {
+                        var student = Student()
+                        student.id = item["id"].intValue
+                        student.major_id = item["major_id"].intValue
+                        student.is_undergraduate = item["is_undergraduate"].boolValue
+                        student.student_id = item["student_id"].intValue
+                        student.position = item["position"].intValue
+                        self.queue.append(student)
+                        
+                        if (student.student_id == self.yourArray[0].studentId) {
+                            self.addToQueue.setTitle("Remove from Queue", for: .normal)
+                        }
+                        
+                    }
+                    if (self.queue.count == 1) {
+                        self.queueLabel.text = "There is " + String(self.queue.count) + " person in the queue"
+                    }
+                    else {
+                        self.queueLabel.text = "There are " + String(self.queue.count) + " people in the queue"
+                    }
+                }
+                else {
+                    self.queue.removeAll()
+                    self.queueLabel.text = "There is no one in the queue!"
+                }
             case .failure(let error):
                 print(error)
             }
@@ -119,6 +204,7 @@ class FirstViewController: UIViewController {
             } catch {
                 exit(0)
             }
+            
             loadQueue()
 
         }

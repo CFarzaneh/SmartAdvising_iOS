@@ -17,7 +17,28 @@
                     <view key="view" contentMode="scaleToFill" id="zVz-47-GLb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g1d-mp-bkp">
+                                <rect key="frame" x="176.5" y="440" width="61" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iu-fY-SXY">
+                                <rect key="frame" x="159.5" y="506" width="95" height="30"/>
+                                <state key="normal" title="Add to Queue"/>
+                                <connections>
+                                    <action selector="addQueue:" destination="9pv-A4-QxB" eventType="touchUpInside" id="mfg-N0-eqp"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="8iu-fY-SXY" firstAttribute="top" secondItem="g1d-mp-bkp" secondAttribute="bottom" constant="45" id="4Ay-aU-QRX"/>
+                            <constraint firstItem="g1d-mp-bkp" firstAttribute="centerX" secondItem="MkN-xg-Fmk" secondAttribute="centerX" id="AEb-yJ-6vE"/>
+                            <constraint firstItem="g1d-mp-bkp" firstAttribute="centerY" secondItem="MkN-xg-Fmk" secondAttribute="centerY" id="Exr-Rh-jMx"/>
+                            <constraint firstItem="8iu-fY-SXY" firstAttribute="centerX" secondItem="MkN-xg-Fmk" secondAttribute="centerX" id="V2m-GY-Hqq"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="MkN-xg-Fmk"/>
                     </view>
                     <navigationItem key="navigationItem" title="Waiting Room" id="f95-va-V6H">
@@ -26,8 +47,11 @@
                                 <action selector="logout:" destination="9pv-A4-QxB" id="Vl3-rW-q3x"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="dLs-7d-7ag"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="addToQueue" destination="8iu-fY-SXY" id="GNw-yH-QFs"/>
+                        <outlet property="queueLabel" destination="g1d-mp-bkp" id="Jbw-kx-x42"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>

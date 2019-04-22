@@ -207,7 +207,7 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         })
     }
     
-    func checkIfStudent(email: String,completion : @escaping (Int)->()) {
+    func checkIfStudent(email: String,completion : @escaping (Int, Int, Bool)->()) {
         
         let identifier = email.components(separatedBy: "@")[0]
         let schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students"
@@ -227,21 +227,50 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 let theJSON = JSON(value)
                 let theArray = theJSON["students"].arrayValue
                 
+                var majorId = -1
+                var grade = true
                 if theArray.isEmpty == false {
-                    for item in theJSON["students"].arrayValue {
+                    for item in theArray {
                         studentId = item["id"].intValue
+                        majorId = item["major_id"].intValue
+                        grade = item["is_undergraduate"].boolValue
                     }
-                    completion(studentId)
+                    completion(studentId,majorId,grade)
                 }
                 else {
-                    completion(studentId)
+                    completion(studentId,majorId,grade)
                 }
             case .failure(let error):
                 print(error)
-                studentId = 404
-                completion(studentId)
             }
         })
+    }
+    
+    
+    func changeMajor(studentId: Int, majorId: Int, undergrad: Bool, completion: @escaping()->()) {
+        
+        var schoolUrl = "https://bvet7wmxma.execute-api.us-east-1.amazonaws.com/prod/students/"
+        schoolUrl += String(studentId)
+    
+        let parameters: Parameters = [
+            "major_id":majorId,
+            "is_undergraduate":undergrad,
+            "app_token": "6vDahPFC9waiEwI3UMHbz5paBkTPRFZshJeDL7ZYnFXvbcoYRGtFPD6Ogh8iy6nI"
+        ]
+        
+        AF.request(schoolUrl, method: .patch, parameters: parameters, encoding: URLEncoding.queryString).validate().responseJSON(completionHandler: {
+            response in
+            
+            switch response.result {
+            case .success(_):
+                print("Successfully changed majors")
+                completion()
+            case .failure(let error):
+                print(error)
+                completion()
+            }
+        })
+        
     }
     
     func addStudentToServer(email: String, undergrad: Bool, majorId: Int, completion : @escaping (Int)->()) {
@@ -410,13 +439,22 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                         user.majorId = Int32(majorId)
                     }
                     self.checkIfStudent(email: unwrappedEmail, completion: {
-                        studentId in
+                        (studentId, majorId, is_undergrad) in
                         if (studentId != -1) {
                             print("Already exists!")
                             user.studentId = Int32(studentId)
                             
-                            PersistenceService.saveContext()
-                            self.dismiss(animated: true, completion: nil)
+                            if (majorId != user.majorId || is_undergrad != user.undergrad) {
+                                self.changeMajor(studentId: studentId, majorId: Int(user.majorId), undergrad: user.undergrad, completion: {
+                                    print("Major changed!")
+                                    PersistenceService.saveContext()
+                                    self.dismiss(animated: true, completion: nil)
+                                })
+                            }
+                            else {
+                                PersistenceService.saveContext()
+                                self.dismiss(animated: true, completion: nil)
+                            }
                         }
                         else {
                             print("Doesn't exist. POST request")
@@ -428,7 +466,6 @@ class LoginViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                                 }
  
                                 PersistenceService.saveContext()
-                                
                                 self.dismiss(animated: true, completion: nil)
                             })
                         }
