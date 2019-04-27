@@ -8,6 +8,7 @@ target 'SmartAdvising' do
   pod 'p2.OAuth2'
   pod 'SwiftyJSON'
   pod 'Glyptodon', '~> 2.0'
+  pod 'CircleProgressBar', '~> 0.32’
 
   target 'SmartAdvisingTests' do
     inherit! :search_paths

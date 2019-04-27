@@ -9,6 +9,7 @@ import UIKit
 import CoreData
 import Alamofire
 import SwiftyJSON
+import CircleProgressBar
 
 class FirstViewController: UIViewController {
     
@@ -23,6 +24,8 @@ class FirstViewController: UIViewController {
         var position = 0
     }
     
+    @IBOutlet weak var circleBar: CircleProgressBar!
+    
     var yourArray = [User]()
     var queue = [Student]()
     
@@ -30,6 +33,9 @@ class FirstViewController: UIViewController {
 
     @IBOutlet weak var queueLabel: UILabel!
     @IBOutlet weak var addToQueue: UIButton!
+    @IBOutlet weak var positionLabel: UILabel!
+    var timer: Timer!
+    let service = OutlookService.shared()
     
     @IBAction func addQueue(_ sender: Any) {
         
@@ -52,7 +58,8 @@ class FirstViewController: UIViewController {
                     print("Successfully added into queue at position", theDictionary["position"]!.intValue)
                     
                     self.queueNumber = theDictionary["id"]!.intValue
-                
+                    self.yourArray[0].position = theDictionary["position"]!.int32Value
+                    
                     self.loadQueue()
                 case .failure(let error):
                     print(error)
@@ -66,13 +73,30 @@ class FirstViewController: UIViewController {
     
         
     }
-    
-    let service = OutlookService.shared()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-
+        
+        if (userNotLoggedIn != true) {
+            timer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+            
+            addToQueue.backgroundColor = UIColor(red: 200.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            addToQueue.layer.cornerRadius = 10.0
+            
+            addToQueue.layer.borderWidth = 2.0
+            addToQueue.layer.borderColor = UIColor.clear.cgColor
+            
+            addToQueue.layer.shadowColor = UIColor(red: 100.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
+            addToQueue.layer.shadowOpacity = 1.0
+            addToQueue.layer.shadowRadius = 1.0
+            addToQueue.layer.shadowOffset = CGSize(width: 0, height: 3)
+            addToQueue.setTitleColor(.white, for: .normal)
+        }
+    }
+    
+    @objc func updateCounting(){
+        self.loadQueue()
     }
     
     func dequeue(id: Int) {
@@ -91,7 +115,10 @@ class FirstViewController: UIViewController {
                 print("Successfully removed from queue")
                 self.queueNumber = 0
                 self.addToQueue.setTitle("Add to Queue", for: .normal)
+                self.positionLabel.text = ""
+                self.yourArray[0].position = 0
                 self.loadQueue()
+                self.circleBar.setProgress(0.0, animated: true, duration: 1)
                 
             case .failure(let error):
                 print(error)
@@ -131,7 +158,19 @@ class FirstViewController: UIViewController {
                         self.queue.append(student)
                         
                         if (student.student_id == self.yourArray[0].studentId) {
+                            self.queueNumber = student.id
                             self.addToQueue.setTitle("Remove from Queue", for: .normal)
+                            self.positionLabel.text = "You are in position " + String(student.position)
+                            
+                            let percentage = CGFloat(1.0 - Double(student.position)/Double(self.yourArray[0].position))
+                            
+                            if ((student.position) == 1) {
+                                self.circleBar.setProgress(0.95, animated: true, duration: 1)
+                            }
+                            else {
+                                self.circleBar.setProgress(percentage, animated: true, duration: 1)
+                            }
+ 
                         }
                         
                     }
@@ -143,7 +182,14 @@ class FirstViewController: UIViewController {
                     }
                 }
                 else {
+                    self.positionLabel.text = ""
+                    if (self.yourArray[0].position != 0) {
+                        self.circleBar.setProgress(1.0, animated: true, duration: 1)
+                        self.positionLabel.text = "It's your turn!"
+                        self.yourArray[0].position = 0
+                    }
                     self.queue.removeAll()
+                    self.addToQueue.setTitle("Add to Queue", for: .normal)
                     self.queueLabel.text = "There is no one in the queue!"
                 }
             case .failure(let error):
@@ -204,6 +250,8 @@ class FirstViewController: UIViewController {
             } catch {
                 exit(0)
             }
+            
+            print("POSITION",yourArray[0].position)
             
             loadQueue()
 

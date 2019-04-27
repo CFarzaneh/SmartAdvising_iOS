@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "89CC9BA59DBA42C3A886707C21F0A0D6"
-               BuildableName = "Glyptodon.framework"
-               BlueprintName = "Glyptodon"
+               BlueprintIdentifier = "E8FC0ECF41AE9A8566430E33A0419EBC"
+               BuildableName = "CircleProgressBar.framework"
+               BlueprintName = "CircleProgressBar"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
