@@ -90,7 +90,7 @@
             </objects>
             <point key="canvasLocation" x="1659.4202898550725" y="-320.08928571428572"/>
         </scene>
-        <!--FAQ-->
+        <!--Frequently Asked Questions-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
                 <viewController id="8rJ-Kc-sve" customClass="SecondViewController" customModule="SmartAdvising" customModuleProvider="target" sceneMemberID="viewController">
@@ -113,7 +113,7 @@
                             <outlet property="delegate" destination="8rJ-Kc-sve" id="wWb-kb-vTe"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="FAQ" id="J1C-wV-TKf"/>
+                    <navigationItem key="navigationItem" title="Frequently Asked Questions" id="J1C-wV-TKf"/>
                     <connections>
                         <outlet property="tableView" destination="RsT-og-Kat" id="6jG-Yf-Uqd"/>
                     </connections>
@@ -172,10 +172,12 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SmartAdvising" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OxP-bY-61q">
-                                <rect key="frame" x="97" y="131" width="220" height="56"/>
+                                <rect key="frame" x="97" y="131" width="220" height="57"/>
                                 <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="35"/>
                                 <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nuf-SD-l3p">
                                 <rect key="frame" x="20" y="603" width="374" height="41"/>
@@ -191,7 +193,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rt6-uj-Xgu">
-                                <rect key="frame" x="20" y="266" width="374" height="129"/>
+                                <rect key="frame" x="20" y="267" width="374" height="129"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="School" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1j9-Xx-Whp" customClass="CustomUITextField" customModule="SmartAdvising" customModuleProvider="target">
                                         <rect key="frame" x="8" y="0.0" width="358" height="43"/>
