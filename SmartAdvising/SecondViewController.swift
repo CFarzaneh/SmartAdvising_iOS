@@ -46,6 +46,7 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
             myArray.append(i.question)
         }
         
+        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
         let array = (myArray as NSArray).filtered(using: searchPredicate) as! [String]
         print(array.count)
         

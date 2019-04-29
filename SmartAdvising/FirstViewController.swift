@@ -77,21 +77,21 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+    
+        addToQueue.backgroundColor = UIColor(red: 200.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        addToQueue.layer.cornerRadius = 10.0
+        
+        addToQueue.layer.borderWidth = 2.0
+        addToQueue.layer.borderColor = UIColor.clear.cgColor
+        
+        addToQueue.layer.shadowColor = UIColor(red: 100.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
+        addToQueue.layer.shadowOpacity = 1.0
+        addToQueue.layer.shadowRadius = 1.0
+        addToQueue.layer.shadowOffset = CGSize(width: 0, height: 3)
+        addToQueue.setTitleColor(.white, for: .normal)
         
         if (userNotLoggedIn != true) {
-            timer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
-            
-            addToQueue.backgroundColor = UIColor(red: 200.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
-            addToQueue.layer.cornerRadius = 10.0
-            
-            addToQueue.layer.borderWidth = 2.0
-            addToQueue.layer.borderColor = UIColor.clear.cgColor
-            
-            addToQueue.layer.shadowColor = UIColor(red: 100.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
-            addToQueue.layer.shadowOpacity = 1.0
-            addToQueue.layer.shadowRadius = 1.0
-            addToQueue.layer.shadowOffset = CGSize(width: 0, height: 3)
-            addToQueue.setTitleColor(.white, for: .normal)
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
         }
     }
     
